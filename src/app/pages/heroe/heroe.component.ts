@@ -1,4 +1,8 @@
+
+import { compileNgModule } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HeroesService } from '../../services/heroes.service';
 
 @Component({
   selector: 'app-heroe',
@@ -7,9 +11,49 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeroeComponent implements OnInit {
 
-  constructor() { }
+  miform: FormGroup;
+
+  constructor(private formBuilder: FormBuilder, private heroService:HeroesService) {
+    this.crearForm();
+  }
 
   ngOnInit(): void {
   }
 
+
+  //Método para la creación del formulario
+  crearForm() {
+    this.miform = this.formBuilder.group({
+      id: [{value: '', disabled: true},],
+      nombre: [''],
+      poder: [''],
+      vivo: [true]
+    });
+  }
+
+  //Método para guardar la info al server
+  guardarInfo() {
+    //Comprobar que la información del form es válida o no
+    if (this.miform.invalid) {
+      console.log('Formulario no valido');
+      return;
+    }
+    //Si es válida entonces: obtengo la data del mismo
+    const heroe = this.miform.value;
+    //Realizo el posteo, mediante el uso de un servicio
+    this.heroService.crearHeroe(heroe).subscribe((resp:any)=>{
+      console.log(resp);
+      this.miform.setValue(resp);
+    })
+  }
+
+  //Método para ocultar y mostrar el boton de vivo o muerto
+  updateEstado() {
+    let valorActual = this.miform.get('vivo').value;
+    this.miform.get('vivo').setValue(!valorActual);
+  }
+
+  //Getters para realizar las validaciones de los campos
+  get nombreNoValido() { return (this.miform.get('nombre').invalid && this.miform.get('nombre').touched); }
+  get poderNoValido() { return (this.miform.get('poder').invalid && this.miform.get('poder').touched); }
 }
