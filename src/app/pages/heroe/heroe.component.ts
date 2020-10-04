@@ -1,8 +1,10 @@
 
-import { compileNgModule } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HeroesService } from '../../services/heroes.service';
+import Swal from 'sweetalert2'
+import { Observable } from 'rxjs';
+import { SafeMethodCall } from '@angular/compiler';
 
 @Component({
   selector: 'app-heroe',
@@ -38,22 +40,37 @@ export class HeroeComponent implements OnInit {
       console.log('Formulario no valido');
       return;
     }
+
+    Swal.fire({
+      title: 'Espere',
+      titleText: 'Guardando información',
+      icon: 'info',
+      allowOutsideClick: false
+    })
+    Swal.showLoading();
+
+
+    let peticion: Observable<any>;
+
     //Si es válida entonces: obtengo la data del mismo
     const heroe = this.miform.value;
 
     if(heroe.id){
     //Realizo el posteo para actualizar, mediante el uso de un servicio
-    this.heroService.actualizarHeroe(heroe).subscribe((resp:any)=>{
-      console.log(resp);
-      this.miform.setValue(resp);
-    })
+      peticion = this.heroService.actualizarHeroe(heroe);
     }else{
     //Realizo el posteo para guardar, mediante el uso de un servicio
-    this.heroService.crearHeroe(heroe).subscribe((resp:any)=>{
-      console.log(resp);
+      peticion= this.heroService.crearHeroe(heroe);
+    }
+
+    peticion.subscribe(resp=>{
+      Swal.fire({
+        title: 'Excelente',
+        titleText: 'Información almacenada correctamente',
+        icon: 'success',
+      })
       this.miform.setValue(resp);
     })
-    }
   }
 
   //Método para ocultar y mostrar el boton de vivo o muerto
