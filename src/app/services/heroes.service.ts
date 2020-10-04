@@ -18,4 +18,13 @@ export class HeroesService {
       })
     );
   }
+
+  actualizarHeroe(heroe){
+    const heroeTemp = {
+      nombre: heroe.nombre,
+      poder: heroe.poder,
+      vivo: heroe.vivo
+    }
+    return this.http.put(`${this.url}/heroes/${heroe.id}.json`,heroeTemp)
+  }
 }

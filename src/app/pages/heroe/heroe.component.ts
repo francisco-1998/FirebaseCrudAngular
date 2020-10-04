@@ -40,11 +40,20 @@ export class HeroeComponent implements OnInit {
     }
     //Si es válida entonces: obtengo la data del mismo
     const heroe = this.miform.value;
-    //Realizo el posteo, mediante el uso de un servicio
+
+    if(heroe.id){
+    //Realizo el posteo para actualizar, mediante el uso de un servicio
+    this.heroService.actualizarHeroe(heroe).subscribe((resp:any)=>{
+      console.log(resp);
+      this.miform.setValue(resp);
+    })
+    }else{
+    //Realizo el posteo para guardar, mediante el uso de un servicio
     this.heroService.crearHeroe(heroe).subscribe((resp:any)=>{
       console.log(resp);
       this.miform.setValue(resp);
     })
+    }
   }
 
   //Método para ocultar y mostrar el boton de vivo o muerto
