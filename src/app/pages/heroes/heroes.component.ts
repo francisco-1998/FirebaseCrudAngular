@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroesService } from '../../services/heroes.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-heroes',
@@ -18,6 +19,22 @@ export class HeroesComponent implements OnInit {
       this.heroes=data;
     })
 
+  }
+
+  borrarHeroe(heroe:any, i:number){
+
+    Swal.fire({
+      title: '¿Estaá seguro?',
+      titleText: `Está seguro que desea borrar a ${heroe.name}`,
+      icon: 'question',
+      showConfirmButton: true,
+      showCancelButton: true
+    }).then(resp=>{
+      if(resp.value){
+        this.heroes.splice(i,1);
+        this.hero.borrarUnHeroe(heroe.id).subscribe();
+      }
+    })
   }
 
 }

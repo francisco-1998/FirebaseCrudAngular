@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HeroesService } from '../../services/heroes.service';
 import Swal from 'sweetalert2'
 import { Observable } from 'rxjs';
-import { SafeMethodCall } from '@angular/compiler';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-heroe',
@@ -15,11 +15,24 @@ export class HeroeComponent implements OnInit {
 
   miform: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private heroService:HeroesService) {
+  constructor(private formBuilder: FormBuilder,
+              private heroService:HeroesService,
+              private route:ActivatedRoute) {
     this.crearForm();
   }
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if(id != 'nuevo'){
+      this.heroService.obtenerUnHeroe(id).subscribe((resp:any)=>{
+        this.miform.setValue({
+          id: id,
+          nombre:resp.nombre,
+          poder:resp.poder,
+          vivo:resp.vivo,
+        });
+      })
+    }
   }
 
 

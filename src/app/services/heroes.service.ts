@@ -34,6 +34,14 @@ export class HeroesService {
     );
   }
 
+  obtenerUnHeroe( id:string ){
+    return this.http.get(`${this.url}/heroes/${id}.json`)
+  }
+
+  borrarUnHeroe(id:string){
+    return this.http.delete(`${this.url}/heroes/${id}.json`)
+  }
+
   hacerUnObjetoArreglo(miObjeto: object) {
     //Creo un arreglo vacio para almacenar la transformacion
     const arreglo: any[] = [];
