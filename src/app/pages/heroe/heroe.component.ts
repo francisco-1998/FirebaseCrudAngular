@@ -66,11 +66,12 @@ export class HeroeComponent implements OnInit {
     let peticion: Observable<any>;
 
     //Si es válida entonces: obtengo la data del mismo
+    const id = this.miform.get('id').value;
     const heroe = this.miform.value;
 
-    if(heroe.id){
+    if(id){
     //Realizo el posteo para actualizar, mediante el uso de un servicio
-      peticion = this.heroService.actualizarHeroe(heroe);
+      peticion = this.heroService.actualizarHeroe(heroe,id);
     }else{
     //Realizo el posteo para guardar, mediante el uso de un servicio
       peticion= this.heroService.crearHeroe(heroe);
