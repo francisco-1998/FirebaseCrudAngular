@@ -22,10 +22,11 @@ export class HeroesComponent implements OnInit {
   }
 
   borrarHeroe(heroe:any, i:number){
-
+    console.log(heroe);
+    console.log(i);
     Swal.fire({
       title: '¿Estaá seguro?',
-      titleText: `Está seguro que desea borrar a ${heroe.name}`,
+      titleText: `Está seguro que desea borrar a ${heroe.nombre}`,
       icon: 'question',
       showConfirmButton: true,
       showCancelButton: true
